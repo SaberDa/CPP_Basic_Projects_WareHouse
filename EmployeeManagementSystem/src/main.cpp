@@ -3,8 +3,30 @@
 using namespace std;
 
 #include "workerManager.h"
+#include "worker.h"
+#include "employee.h"
+#include "manager.h"
+#include "boss.h"
 
 int main() {
+
+	/* ================ Test Polymorphism ================*/ 
+	Worker *worker = NULL;
+
+	// Test for Employee
+	worker = new Employee(1, "Bob", 1);
+	worker->showInfo();
+	delete worker;
+
+	// Test for Manager
+	worker = new Manager(2, "Alice", 2);
+	worker->showInfo();
+	delete worker;
+
+	// Test for Boss
+	worker = new Boss(3, "Kate", 3);
+	worker->showInfo();
+	delete worker;
 
 	WorkerManager wm;
 	int choice = 0;
