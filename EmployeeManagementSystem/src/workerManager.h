@@ -21,6 +21,9 @@ public:
 
     WorkerManager();
 
+    // Show system menu
+    void showMenu();
+
     ~WorkerManager();
 };
 
