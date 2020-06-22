@@ -43,6 +43,7 @@ int main() {
 			wm.ExitSystem();
 			break;
 		case 1: 
+			wm.addEmp();
 			break;
 		case 2:
 			break;

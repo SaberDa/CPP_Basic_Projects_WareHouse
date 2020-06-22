@@ -102,5 +102,5 @@ void WorkerManager::addEmp() {
 }
 
 WorkerManager::~WorkerManager() {
-
+    if (this->m_EmpArray != NULL) delete[] this->m_EmpArray;
 }
