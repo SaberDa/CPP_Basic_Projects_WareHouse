@@ -11,3 +11,7 @@ void Employee::showInfo() {
 		<< " \tEmployee Name " << this->m_Name
 		<< " \tEmployee Job" << this->getDeptName() << endl;
 }
+
+string Employee::getDeptName() {
+    return string("Job 1");
+}
