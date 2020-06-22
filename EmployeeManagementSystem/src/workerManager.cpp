@@ -20,6 +20,11 @@ void WorkerManager::showMenu() {
     cout << endl;
 }
 
+void WorkerManager::ExitSystem() {
+    cout << "-------------- EXIT SYSTEM -------------------" << endl;
+    exit(0);
+}
+
 WorkerManager::~WorkerManager() {
 
 }

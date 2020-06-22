@@ -24,6 +24,9 @@ public:
     // Show system menu
     void showMenu();
 
+    // Exit the system
+    void ExitSystem();
+
     ~WorkerManager();
 };
 
