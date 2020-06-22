@@ -13,3 +13,7 @@ void Manager::showInfo() {
 		<< " \tEmployee Name " << this->m_Name
 		<< " \tEmployee Job" << this->getDeptName() << endl;
 }
+
+string Manager::getDeptName() {
+    return string("manager");
+}
