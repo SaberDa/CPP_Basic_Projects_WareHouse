@@ -16,6 +16,11 @@
 
 using namespace std;
 
+#include "worker.h"
+#include "employee.h"
+#include "manager.h"
+#include "boss.h"
+
 class WorkerManager {
 public:
 
@@ -26,6 +31,15 @@ public:
 
     // Exit the system
     void ExitSystem();
+
+    // Count the number of employees in file
+    int m_EmpNum;
+
+    // The pointer to employee array
+    Worker **m_EmpArray;
+
+    // Add employee
+    void addEmp();
 
     ~WorkerManager();
 };
