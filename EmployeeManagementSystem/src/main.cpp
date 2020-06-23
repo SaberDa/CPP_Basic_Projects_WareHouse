@@ -55,6 +55,7 @@ int main() {
 			wm.modEmp();
 			break;
 		case 5: 
+			wm.findEmp();
 			break;
 		case 6: 
 			break;

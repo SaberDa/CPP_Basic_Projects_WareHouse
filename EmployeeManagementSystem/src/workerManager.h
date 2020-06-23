@@ -68,6 +68,9 @@ public:
     // Modify employee
     void modEmp();
 
+    // Find employee
+    void findEmp();
+
     ~WorkerManager();
 };
 

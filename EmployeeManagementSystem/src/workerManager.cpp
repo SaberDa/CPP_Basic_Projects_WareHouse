@@ -300,6 +300,56 @@ void WorkerManager::modEmp() {
     this->saveFile();
 }
 
+// Find employee
+void WorkerManager::findEmp() {
+    if (this->m_FileIsEmpty) {
+        cout << "The file is not exist or it is empty!" << endl;
+        return;
+    } 
+
+    cout << "Please input the number of finding method:"
+         << "1. By Id"
+         << "2. By name" << endl;
+    int select = 0;
+    cin >> select;
+
+    if (select == 1) {
+        // By Id
+        int id;
+        cout << "Please input the ID: " << endl;
+        cin >> id;
+
+        int index = this->isExist(id);
+        if (index == -1) {
+            cout << "The employee is not exist" << endl;
+            return;
+        } else {
+            cout << "The employee you choose is " << endl;
+            this->m_EmpArray[index]->showInfo();
+        }
+    } else if (select == 2) {
+        // By name
+        cout << "Please input the name: " << endl;
+        string name;
+        cin >> name;
+
+        bool flag = false;
+        for (int i = 0; i < m_EmpNum; i++) {
+            if (m_EmpArray[i]->m_Name == name) {
+                cout << "The employee you choose is " << endl;
+                this->m_EmpArray[i]->showInfo();
+                flag = true;
+            }
+        }
+
+        if (flag == false) {
+            cout << "The employee is not exist" << endl;
+        }
+    } else {
+        cout << "Please input the correct number!" << endl;
+    }
+}
+
 WorkerManager::~WorkerManager() {
     if (this->m_EmpArray != NULL) delete[] this->m_EmpArray;
 }
