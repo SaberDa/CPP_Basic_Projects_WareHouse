@@ -47,6 +47,9 @@ public:
     // Save file
     void saveFile();
 
+    // Judge if the file is empty
+    bool m_FileIsEmpty;
+
     ~WorkerManager();
 };
 

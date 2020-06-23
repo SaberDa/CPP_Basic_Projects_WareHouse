@@ -2,11 +2,30 @@
 
 WorkerManager::WorkerManager() {
 
-    // Init the number
-    this->m_EmpNum = 0;
+    ifstream ifs;
+    ifs.open(FILENAME, ios::in);
 
-    // Init the pointer
-    this->m_EmpArray = NULL;
+    // The case that there is no file
+    if (!ifs.is_open()) {
+        cout << "There is no file named " << FILENAME << endl;
+        this->m_EmpNum = 0;             // Init number
+        this->m_FileIsEmpty = true;     // Init file flag
+        this->m_EmpArray = NULL;        // Init array
+        ifs.close();                    // Close the file
+        return;
+    }
+
+    // The case that file exists
+    char ch;
+    ifs >> ch;
+    if (ifs.eof()) {
+        cout << "The file is empty!" << endl;
+        this->m_EmpNum = 0;
+        this->m_FileIsEmpty = true;
+        this->m_EmpArray = NULL;
+        ifs.close();
+        return;
+    }
 
 }
 
@@ -94,6 +113,7 @@ void WorkerManager::addEmp() {
         // Renew the properties 
         this->m_EmpArray = newSpace;
         this->m_EmpNum = newSize;
+        this->m_FileIsEmpty = false;
 
         cout << "Add Successfully" << endl;
 
