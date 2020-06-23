@@ -186,6 +186,17 @@ void WorkerManager::initEmp() {
     }
 }
 
+// Show employee information
+void WorkerManager::showEmp() {
+    if (this->m_FileIsEmpty) {
+        cout << "The file is not exist or it is empty!" << endl;
+    } else {
+        for (int i = 0; i < m_EmpNum; i++) {
+            this->m_EmpArray[i]->showInfo();
+        }
+    }
+}
+
 WorkerManager::~WorkerManager() {
     if (this->m_EmpArray != NULL) delete[] this->m_EmpArray;
 }

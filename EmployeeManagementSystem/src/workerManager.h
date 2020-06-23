@@ -56,6 +56,9 @@ public:
     // Init employee
     void initEmp();
 
+    // Show employee information
+    void showEmp();
+
     ~WorkerManager();
 };
 
