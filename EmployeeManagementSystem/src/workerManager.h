@@ -74,6 +74,9 @@ public:
     // Sort employee
     void sortEmp();
 
+    // Clean the file
+    void cleanFile();
+
     ~WorkerManager();
 };
 

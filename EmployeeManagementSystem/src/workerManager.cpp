@@ -396,6 +396,39 @@ void WorkerManager::sortEmp() {
     this->showEmp();
 }
 
+// Clean the file
+void WorkerManager::cleanFile() {
+    cout << "You are going to clear the file content, are you ready? "
+         << "1. YES"
+         << "2. NO" << endl;
+    
+    int select = 0;
+    cin >> select;
+
+    if (!(select == 1 || select == 2)) {
+        cout << "Please input the right number!" << endl;
+        return;
+    }
+
+    if (select == 2) return;
+
+    // Use the ios::trunc to create a new file with the same name to replace the origin file
+    ofstream ofs(FILENAME, ios::trunc);
+    ofs.close();
+
+    if (this->m_EmpArray != NULL) {
+        for (int i = 0; i < m_EmpNum; i++) {
+            if (this->m_EmpArray[i] != NULL) delete this->m_EmpArray[i];
+        }
+        this->m_EmpNum = 0;
+        delete[] this->m_EmpArray;
+        this->m_EmpArray = NULL;
+        this->m_FileIsEmpty = true;
+    }
+
+    cout << "Clear successfully" << endl;
+}   
+
 WorkerManager::~WorkerManager() {
     if (this->m_EmpArray != NULL) delete[] this->m_EmpArray;
 }

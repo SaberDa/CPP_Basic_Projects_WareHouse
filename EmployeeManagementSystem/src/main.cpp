@@ -61,9 +61,9 @@ int main() {
 			wm.sortEmp();
 			break;
 		case 7: 
+			wm.cleanFile();
 			break;
 		default:
-			system("cls");
 			break;
 		}
 	}
