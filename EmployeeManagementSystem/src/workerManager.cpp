@@ -213,6 +213,35 @@ int WorkerManager::isExist(int id) {
     return index;
 }
 
+// Delete employee
+void WorkerManager::delEmp() {
+    if (this->m_FileIsEmpty) {
+        cout << "The file is not exist or it is empty!" << endl;
+    } else {
+        // Input the ID
+        cout << "Please input the employee ID you want to delete: " << endl;
+        int id = 0;
+        cin >> id;
+
+        // Judge if the employee exists
+        int index = this->isExist(id);
+        if (index != -1) {
+            for (int i = index; i < this->m_EmpNum; i++) {
+                this->m_EmpArray[i] = this->m_EmpArray[i + 1];
+            }
+            // Renew the num
+            this->m_EmpNum--;
+
+            // Renew the data and save file
+            this->saveFile();
+
+            cout << "Delete successfully" << endl;
+        } else {
+            cout << "The employee is not exist" << endl;
+        }
+    }
+}
+
 WorkerManager::~WorkerManager() {
     if (this->m_EmpArray != NULL) delete[] this->m_EmpArray;
 }
