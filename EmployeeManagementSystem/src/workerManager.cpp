@@ -350,6 +350,52 @@ void WorkerManager::findEmp() {
     }
 }
 
+// Sort employee
+void WorkerManager::sortEmp() {
+    if (this->m_FileIsEmpty) {
+        cout << "The file is not exist or it is empty!" << endl;
+        return;
+    } 
+
+    cout << "Please choose a sorting method"
+         << "1. Ascending order by employee number"
+         << "2. Descending order by employee number" << endl;
+    int select = 0;
+    cin >> select;
+
+    if (!(select == 1 || select == 2)) {
+        cout << "Please input the right method number!" << endl;
+        return;
+    }
+
+    for (int i = 0; i < m_EmpNum; i++) {
+        int minOrMax = i;
+        for (int j = i + 1; j < m_EmpNum; j++) {
+            if (select == 1) {
+                // Ascending
+                if (m_EmpArray[minOrMax]->m_Id > m_EmpArray[j]->m_Id) 
+                    minOrMax = j;
+            } else if (select == 2) {
+                // Descending
+                if (m_EmpArray[minOrMax]->m_Id < m_EmpArray[j]->m_Id)
+                    minOrMax = j;
+            }
+        }
+        if (i != minOrMax) {
+            Worker *temp = m_EmpArray[i];
+            m_EmpArray[i] = m_EmpArray[minOrMax];
+            m_EmpArray[minOrMax] = temp;
+        }
+    }
+
+    cout << "Sort successfully" << endl;
+
+    // Renew the data and save file 
+    this->saveFile();
+    // Show the results after sorting
+    this->showEmp();
+}
+
 WorkerManager::~WorkerManager() {
     if (this->m_EmpArray != NULL) delete[] this->m_EmpArray;
 }

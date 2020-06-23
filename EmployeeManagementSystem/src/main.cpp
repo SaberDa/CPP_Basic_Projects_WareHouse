@@ -58,6 +58,7 @@ int main() {
 			wm.findEmp();
 			break;
 		case 6: 
+			wm.sortEmp();
 			break;
 		case 7: 
 			break;

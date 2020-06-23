@@ -71,6 +71,9 @@ public:
     // Find employee
     void findEmp();
 
+    // Sort employee
+    void sortEmp();
+
     ~WorkerManager();
 };
 
