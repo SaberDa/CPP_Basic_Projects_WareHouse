@@ -49,8 +49,10 @@ int main() {
 			wm.showEmp();
 			break;
 		case 3: 
+			wm.delEmp();
 			break;
 		case 4: 
+			wm.modEmp();
 			break;
 		case 5: 
 			break;

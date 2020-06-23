@@ -65,6 +65,9 @@ public:
     // Judge employee
     int isExist(int id);
 
+    // Modify employee
+    void modEmp();
+
     ~WorkerManager();
 };
 

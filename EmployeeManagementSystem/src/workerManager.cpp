@@ -242,6 +242,64 @@ void WorkerManager::delEmp() {
     }
 }
 
+// Modify employee
+void WorkerManager::modEmp() {
+    if (this->m_FileIsEmpty) {
+        cout << "The file is not exist or it is empty!" << endl;
+        return;
+    } 
+
+    // Input the ID
+    cout << "Please input the employee ID you want to modify" << endl;
+    int id;
+    cin >> id;
+
+    // Judge if the employee exists
+    int index = this->isExist(id);
+    if (index == -1) {
+        cout << "The employee is not exist" << endl;
+        return;
+    }
+
+    // Delete the old information
+    delete this->m_EmpArray[index];
+
+    // Input the new information
+    int newId = 0, dSelect = 0;
+    string newName = "";
+
+    cout << "The origin ID is " << id << ", please input the new ID: " << endl;
+    cin >> newId;
+    cout << "Please input the new name:" << endl;
+    cin >> newName;
+    cout << "Please input the job title: "  
+         << "1. Normal employee" 
+         << "2. Manager" 
+         << "3. Boss" << endl;
+    cin >> dSelect;
+
+    Worker *worker = NULL;
+    switch (dSelect) {
+        case 1:
+            worker = new Employee(newId, newName, dSelect);
+            break;
+        case 2:
+            worker = new Manager(newId, newName, dSelect);
+            break;
+        case 3:
+            worker = new Boss(newId, newName, dSelect);
+            break;
+        default: break;
+    }
+
+    // Add the new information into its origin index in employee array
+    this->m_EmpArray[index] = worker;
+    cout << "Modify successfully" << endl;
+
+    // Renew the data and save file 
+    this->saveFile();
+}
+
 WorkerManager::~WorkerManager() {
     if (this->m_EmpArray != NULL) delete[] this->m_EmpArray;
 }
