@@ -197,6 +197,22 @@ void WorkerManager::showEmp() {
     }
 }
 
+// Judge if this employee exists by its ID
+// If exists, returns its index
+// Or returns -1
+int WorkerManager::isExist(int id) {
+    int index = -1;
+
+    for (int i = 0; i < this->m_EmpNum; i++) {
+        if (this->m_EmpArray[i]->m_Id == id) {
+            index = i;
+            break;
+        }
+    }
+
+    return index;
+}
+
 WorkerManager::~WorkerManager() {
     if (this->m_EmpArray != NULL) delete[] this->m_EmpArray;
 }

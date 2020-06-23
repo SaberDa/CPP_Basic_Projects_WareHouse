@@ -59,6 +59,12 @@ public:
     // Show employee information
     void showEmp();
 
+    // Delete employee
+    void delEmp();
+
+    // Judge employee
+    int isExist(int id);
+
     ~WorkerManager();
 };
 
