@@ -32,6 +32,10 @@ WorkerManager::WorkerManager() {
     // cout << "The current employee number is " << num << endl;
     this->m_EmpNum = num;
 
+    // Init the employee array based on employee number
+    this->m_EmpArray = new Worker *[this->m_EmpNum];
+    initEmp();
+
 }
 
 // Print menu in command line
@@ -157,6 +161,29 @@ int WorkerManager::getEmpNum() {
 
     ifs.close();
     return num;
+}
+
+void WorkerManager::initEmp() {
+    ifstream ifs;
+    ifs.open(FILENAME, ios::in);
+
+    int id, dId;
+    string name;
+
+    int index = 0;
+    while (ifs >> id && ifs >> name && ifs >>dId) {
+        Worker *worker = NULL;
+        if(dId == 1) {
+            worker = new Employee(id, name, dId);
+        } else if (dId == 2) {
+            worker = new Manager(id, name, dId);
+        } else if (dId == 3) {
+            worker = new Boss(id, name, dId);
+        }
+        this->m_EmpArray[index] = worker;
+        index++;
+        // delete[] worker;
+    }
 }
 
 WorkerManager::~WorkerManager() {

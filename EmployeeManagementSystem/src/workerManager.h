@@ -53,6 +53,9 @@ public:
     // Get employee number
     int getEmpNum();
 
+    // Init employee
+    void initEmp();
+
     ~WorkerManager();
 };
 
