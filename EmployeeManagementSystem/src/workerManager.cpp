@@ -96,9 +96,25 @@ void WorkerManager::addEmp() {
         this->m_EmpNum = newSize;
 
         cout << "Add Successfully" << endl;
+
+        this->saveFile();
     } else {
         cout << "Please input an integer which larger than 0" << endl;
     }
+}
+
+void WorkerManager::saveFile() {
+    ofstream ofs;
+    ofs.open(FILENAME, ios::out);
+
+    // Write contents into file
+    for (int i = 0; i < this->m_EmpNum; i++) {
+        ofs << this->m_EmpArray[i]->m_Id << " "
+            << this->m_EmpArray[i]->m_Name << " "
+            << this->m_EmpArray[i]->m_DeptId << endl;
+    }
+
+    ofs.close();
 }
 
 WorkerManager::~WorkerManager() {

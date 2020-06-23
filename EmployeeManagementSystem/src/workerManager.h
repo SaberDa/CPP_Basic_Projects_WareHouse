@@ -13,6 +13,7 @@
 #define __WORKERMANAGER_H__
 
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -20,6 +21,8 @@ using namespace std;
 #include "employee.h"
 #include "manager.h"
 #include "boss.h"
+
+#define FILENAME "empFile.txt"
 
 class WorkerManager {
 public:
@@ -40,6 +43,9 @@ public:
 
     // Add employee
     void addEmp();
+
+    // Save file
+    void saveFile();
 
     ~WorkerManager();
 };
