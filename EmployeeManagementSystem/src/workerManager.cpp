@@ -27,6 +27,11 @@ WorkerManager::WorkerManager() {
         return;
     }
 
+    // Renew the number
+    int num = getEmpNum();
+    // cout << "The current employee number is " << num << endl;
+    this->m_EmpNum = num;
+
 }
 
 // Print menu in command line
@@ -135,6 +140,23 @@ void WorkerManager::saveFile() {
     }
 
     ofs.close();
+}
+
+int WorkerManager::getEmpNum() {
+    ifstream ifs;
+    ifs.open(FILENAME, ios::in);
+
+    int id, dId;
+    string name;
+    int num = 0;
+
+    // Count employee number
+    while (ifs >> id && ifs >> name && ifs >> dId) {
+        num++;
+    }
+
+    ifs.close();
+    return num;
 }
 
 WorkerManager::~WorkerManager() {

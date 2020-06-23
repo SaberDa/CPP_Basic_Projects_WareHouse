@@ -50,6 +50,9 @@ public:
     // Judge if the file is empty
     bool m_FileIsEmpty;
 
+    // Get employee number
+    int getEmpNum();
+
     ~WorkerManager();
 };
 
