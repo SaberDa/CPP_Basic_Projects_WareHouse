@@ -4,6 +4,9 @@ SpeechManager::SpeechManager() {
 
     this->initSpeech();
 
+    // Add speakers
+    this->createSpeaker();
+
 }
 
 void SpeechManager::showMenu() {
@@ -31,6 +34,23 @@ void SpeechManager::initSpeech() {
 
     this->m_Index = 1;
 
+}
+
+void SpeechManager::createSpeaker() {
+    string nameSeed = "ABCDEFGHIJKL";
+    for (int i = 0; i < nameSeed.size(); i++) {
+        string name = "Student ";
+        name += nameSeed[i];
+
+        // init speaker's properties
+        Speaker sp;
+        sp.m_Name = name;
+        for (int i = 0; i < 2; i++) sp.m_Score[i] = 0;
+
+        this->vStudents.push_back(i + 10001);
+
+        this->m_Speaker.insert(make_pair(i + 10001, sp));
+    }
 }
 
 SpeechManager::~SpeechManager() {

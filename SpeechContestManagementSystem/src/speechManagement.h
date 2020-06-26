@@ -47,6 +47,9 @@ public:
     // Init property
     void initSpeech();
 
+    // Init students
+    void createSpeaker();
+
     ~SpeechManager();
 
 };
