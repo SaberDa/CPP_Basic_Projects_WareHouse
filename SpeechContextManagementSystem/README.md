@@ -19,3 +19,19 @@
 - View the previous record: View the results of the previous three top contests, each contest will be recorded in the file, the file is saved with the extension of .csv
 - Clear the contest record: clear the data in the file
 - Exit the contest program: You can exit the current program
+
+---
+
+# Speech Manager 
+
+### Main Function:
+
+- Establish a communication menu interface based on command line with users.
+- Control the speech contest process
+- Read and write interactions with files
+
+---
+
+# Menu Function
+
+Communication interface with users

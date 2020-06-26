@@ -22,6 +22,9 @@ public:
 
     void showMenu();
 
+    // Exit system
+    void exitSystem();
+
     ~SpeechManager();
 
 };

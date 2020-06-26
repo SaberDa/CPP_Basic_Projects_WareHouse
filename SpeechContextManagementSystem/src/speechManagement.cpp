@@ -15,6 +15,11 @@ void SpeechManager::showMenu() {
     cout << endl;
 }
 
+void SpeechManager::exitSystem() {
+    cout << "EXIT SYSTEM" << endl;
+    exit(0);
+}
+
 SpeechManager::~SpeechManager() {
     
 }
