@@ -2,6 +2,8 @@
 
 SpeechManager::SpeechManager() {
 
+    this->initSpeech();
+
 }
 
 void SpeechManager::showMenu() {
@@ -18,6 +20,17 @@ void SpeechManager::showMenu() {
 void SpeechManager::exitSystem() {
     cout << "EXIT SYSTEM" << endl;
     exit(0);
+}
+
+void SpeechManager::initSpeech() {
+    
+    this->vStudents.clear();
+    this->vFirstRoundWinner.clear();
+    this->vVictory.clear();
+    this->m_Speaker.clear();
+
+    this->m_Index = 1;
+
 }
 
 SpeechManager::~SpeechManager() {

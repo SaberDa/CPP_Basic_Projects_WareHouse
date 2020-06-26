@@ -12,11 +12,30 @@
 #define __SPEECHMANAGEMENT_H__
 
 #include <iostream>
+#include <vector>
+#include <map>
 
 using namespace std;
 
+#include "speaker.h"
+
 class SpeechManager {
 public:
+
+    // Contest students, size : 12
+    vector<int> vStudents;
+
+    // The first round winner, size : 6
+    vector<int> vFirstRoundWinner;
+
+    // Contest winner, size : 3
+    vector<int> vVictory;
+
+    // To store students' ID
+    map<int, Speaker> m_Speaker;
+
+    // Contest Round
+    int m_Index;
 
     SpeechManager();
 
@@ -24,6 +43,9 @@ public:
 
     // Exit system
     void exitSystem();
+
+    // Init property
+    void initSpeech();
 
     ~SpeechManager();
 
