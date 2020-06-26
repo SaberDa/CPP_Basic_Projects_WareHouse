@@ -50,6 +50,12 @@ public:
     // Init students
     void createSpeaker();
 
+    // Start speech
+    void startSpeech();
+
+    // Draw
+    void speechDraw();
+
     ~SpeechManager();
 
 };

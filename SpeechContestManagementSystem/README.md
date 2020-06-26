@@ -35,3 +35,13 @@
 # Menu Function
 
 Communication interface with users
+
+---
+
+# Speech Contest Function
+
+## Competition process analysis:
+
+- Draw → Start the speech contest → Display the results of the first round →
+
+- Draw → Start speech contest → Display top three results → Save score

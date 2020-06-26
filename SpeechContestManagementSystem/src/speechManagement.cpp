@@ -1,3 +1,8 @@
+#include <algorithm>
+#include <random>
+
+using namespace std;
+
 #include "speechManagement.h"
 
 SpeechManager::SpeechManager() {
@@ -51,6 +56,32 @@ void SpeechManager::createSpeaker() {
 
         this->m_Speaker.insert(make_pair(i + 10001, sp));
     }
+}
+
+void SpeechManager::startSpeech() {
+
+}
+
+void SpeechManager::speechDraw() {
+    cout << "The " << this->m_Index << "round starts drawing" << endl;
+    cout << "=========================" << endl;
+    cout << "Here are the results" << endl;
+
+    if (this->m_Index == 1) {
+        random_device rd;
+        mt19937 g(rd());
+        shuffle(vStudents.begin(), vStudents.end(), g);
+        for (auto it : vStudents) cout << it << endl;
+        cout << endl;
+    } else {
+        random_device rd;
+        mt19937 g(rd());
+        shuffle(vFirstRoundWinner.begin(), vFirstRoundWinner.end(), g);
+        for (auto it : vFirstRoundWinner) cout << it << endl;
+        cout << endl;
+    }
+    cout << "=========================" << endl;
+    cout << endl;
 }
 
 SpeechManager::~SpeechManager() {
