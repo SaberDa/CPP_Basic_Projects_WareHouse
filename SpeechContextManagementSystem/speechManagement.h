@@ -20,6 +20,8 @@ public:
 
     SpeechManager();
 
+    void showMenu();
+
     ~SpeechManager();
 
 };
