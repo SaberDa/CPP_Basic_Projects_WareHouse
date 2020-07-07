@@ -56,6 +56,9 @@ public:
     // Draw
     void speechDraw();
 
+    // Contest
+    void speechContest();
+
     ~SpeechManager();
 
 };

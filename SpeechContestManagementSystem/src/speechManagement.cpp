@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <random>
+#include <deque>
+#include <numeric>
 
 using namespace std;
 
@@ -60,6 +62,22 @@ void SpeechManager::createSpeaker() {
 
 void SpeechManager::startSpeech() {
 
+    // The first round
+    // Draw
+    speechDraw();
+    // Start contest
+    speechContest();
+    // Show the results
+
+
+    // The second round
+    // Draw
+
+    // Start contest
+
+    // show the final results
+
+    // Store scores
 }
 
 void SpeechManager::speechDraw() {
@@ -82,6 +100,59 @@ void SpeechManager::speechDraw() {
     }
     cout << "=========================" << endl;
     cout << endl;
+}
+
+void SpeechManager::speechContest() {
+    cout << "-------------- The " << this->m_Index << "round will start -------------------" << endl;
+    multimap<double, int, greater<int>> groupScores;        // To store key:score value:ID
+    int num = 0;        // To record the number of people, 6 person each group
+
+    vector<int> v_Src;      // To store the contest people
+    if (this->m_Index == 1) 
+        v_Src = vStudents;
+    else 
+        v_Src = vFirstRoundWinner; 
+
+    for (auto it : v_Src) {
+        num++;
+
+        deque<double> d;
+        for (int i = 0; i < 10; i++) {
+            double score = (rand() % 401 + 600) / 10.f;     // The range of score is 600 ~ 1000
+            // cout << "The score is: " << score << endl;
+            d.push_back(score);
+        }
+
+        sort(d.begin(), d.end(), greater<double>());
+        d.pop_front();
+        d.pop_back();
+
+        double sum = accumulate(d.begin(), d.end(), 0);
+        double avg = sum / (double)d.size();
+
+        this->m_Speaker[it].m_Score[this->m_Index - 1] = avg;
+
+        groupScores.insert(make_pair(avg, it));
+
+        if (num % 6 == 0) {
+            cout << "The " << num / 6 << " group results: " << endl;
+            // for (auto x : groupScores) 
+            //     cout << "The ID is: " << x.second << ", name is: " 
+            //          << this->m_Speaker[x.second].m_Name <<
+            //     ", score is: " << this->m_Speaker[x.second].m_Score[this->m_Index - 1] << endl;
+            int count = 3;
+            for (auto x : groupScores) {
+                if (this->m_Index == 1) {
+                    vFirstRoundWinner.push_back(x.second);
+                } else {
+                    vVictory.push_back(x.second);
+                }
+            }
+            groupScores.clear();
+            cout << endl;
+        }
+    }
+    cout << "-------------- The " << this->m_Index << "round finished -------------------" << endl;
 }
 
 SpeechManager::~SpeechManager() {
