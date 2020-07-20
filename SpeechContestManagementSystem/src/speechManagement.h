@@ -62,6 +62,9 @@ public:
     // Show results
     void showScore();
 
+    // Store results
+    void saveRecord();
+
     ~SpeechManager();
 
 };

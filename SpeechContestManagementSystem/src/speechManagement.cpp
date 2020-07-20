@@ -2,6 +2,8 @@
 #include <random>
 #include <deque>
 #include <numeric>
+#include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -68,16 +70,20 @@ void SpeechManager::startSpeech() {
     // Start contest
     speechContest();
     // Show the results
-
+    showScore();
 
     // The second round
+    this->m_Index++;
     // Draw
-
+    speechDraw();
     // Start contest
-
+    speechContest();
     // show the final results
-
+    showScore();
     // Store scores
+    saveRecord();
+
+    cout << "The speech contest is finished" << endl;
 }
 
 void SpeechManager::speechDraw() {
@@ -165,10 +171,27 @@ void SpeechManager::showScore() {
     }
 
     for (vector<int>::iterator it  = v.begin(); it != v.end(); it++) {
-        cout << *it << " " << m_Speaker[*it].m_Name << " " << m_Speaker[*it].m_Score << endl;
+        std::cout << *it << " " << m_Speaker[*it].m_Name << " " << m_Speaker[*it].m_Score << std::endl;
     }
 
     this->showMenu();
+}
+
+void SpeechManager::saveRecord() {
+    ofstream ofs;
+
+    /* Use output to open and write file */
+    ofs.open("speech.csv", ios::out | ios::app);
+
+    for (vector<int>::iterator it = vVictory.begin(); it != vVictory.end(); it++) {
+        ofs << *it << "," << m_Speaker[*it].m_Score[1] << ",";
+    }
+    
+    ofs << endl;
+
+    ofs.close();
+
+    cout << "Results are stored" << endl;
 }
 
 SpeechManager::~SpeechManager() {
