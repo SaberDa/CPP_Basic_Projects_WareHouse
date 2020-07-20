@@ -259,6 +259,25 @@ void SpeechManager::showRecord() {
     }
 }
 
+void SpeechManager::clearRecord() {
+    cout << "Are you going to clear all results?" << endl;
+    cout << "Y/n" << endl;
+
+    char select;
+    cin >> select;
+
+    if (select == 'Y') {
+        ofstream ofs("speech.csv", ios::trunc);
+        ofs.close();
+        this->initSpeech();
+        this->createSpeaker();
+        this->loadRecord();
+        cout << "All clear" << endl;
+    } else {
+        return;
+    }
+}
+
 SpeechManager::~SpeechManager() {
     
 }

@@ -77,6 +77,9 @@ public:
     // Show previous results
     void showRecord();
 
+    // Clear results
+    void clearRecord();
+
     ~SpeechManager();
 
 };
