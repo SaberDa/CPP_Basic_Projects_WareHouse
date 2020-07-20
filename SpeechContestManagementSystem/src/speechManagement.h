@@ -59,6 +59,9 @@ public:
     // Contest
     void speechContest();
 
+    // Show results
+    void showScore();
+
     ~SpeechManager();
 
 };

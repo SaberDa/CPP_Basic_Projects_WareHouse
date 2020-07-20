@@ -155,6 +155,22 @@ void SpeechManager::speechContest() {
     cout << "-------------- The " << this->m_Index << "round finished -------------------" << endl;
 }
 
+void SpeechManager::showScore() {
+    vector<int> v;
+
+    if (this->m_Index == 1) {
+        v = vFirstRoundWinner;
+    } else {
+        v = vVictory;
+    }
+
+    for (vector<int>::iterator it  = v.begin(); it != v.end(); it++) {
+        cout << *it << " " << m_Speaker[*it].m_Name << " " << m_Speaker[*it].m_Score << endl;
+    }
+
+    this->showMenu();
+}
+
 SpeechManager::~SpeechManager() {
     
 }
