@@ -45,7 +45,7 @@ void SpeechManager::initSpeech() {
     this->m_Speaker.clear();
 
     this->m_Index = 1;
-
+    this->m_Record.clear();
 }
 
 void SpeechManager::createSpeaker() {
@@ -85,6 +85,11 @@ void SpeechManager::startSpeech() {
     showScore();
     // Store scores
     saveRecord();
+
+    // Reset contest
+    this->initSpeech();
+    this->createSpeaker();
+    this->loadRecord();
 
     cout << "The speech contest is finished" << endl;
 }
@@ -195,6 +200,8 @@ void SpeechManager::saveRecord() {
     ofs.close();
 
     cout << "Results are stored" << endl;
+
+    this->fileIsEmpty = false;
 }
 
 void SpeechManager::loadRecord() {
@@ -240,6 +247,16 @@ void SpeechManager::loadRecord() {
     }
 
     ifs.close();
+}
+
+void SpeechManager::showRecord() {
+    if (this->fileIsEmpty) {
+        cout << "The file doesn't exist" << endl;
+        return;
+    } 
+    for (int i = 0; i < this->m_Record.size(); i++) {
+        cout << "Results:" << endl;
+    }
 }
 
 SpeechManager::~SpeechManager() {

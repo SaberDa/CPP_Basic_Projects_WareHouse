@@ -74,6 +74,8 @@ public:
     // Read results
     void loadRecord();
 
+    // Show previous results
+    void showRecord();
 
     ~SpeechManager();
 
