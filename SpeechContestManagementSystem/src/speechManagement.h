@@ -37,6 +37,12 @@ public:
     // Contest Round
     int m_Index;
 
+    // The flag to judge file is empty or not
+    bool fileIsEmpty;
+
+    // Previous record
+    map<int, vector<string>> m_Record;
+
     SpeechManager();
 
     void showMenu();
@@ -64,6 +70,10 @@ public:
 
     // Store results
     void saveRecord();
+
+    // Read results
+    void loadRecord();
+
 
     ~SpeechManager();
 

@@ -16,6 +16,9 @@ SpeechManager::SpeechManager() {
     // Add speakers
     this->createSpeaker();
 
+    // Get previous results
+    this->loadRecord();
+
 }
 
 void SpeechManager::showMenu() {
@@ -192,6 +195,51 @@ void SpeechManager::saveRecord() {
     ofs.close();
 
     cout << "Results are stored" << endl;
+}
+
+void SpeechManager::loadRecord() {
+    ifstream ifs("speech.csv", ios::in);
+
+    if (!ifs.is_open()) {
+        this->fileIsEmpty = true;
+        cout << "Cannot find the file" << endl;
+        ifs.close();
+        return;
+    }
+
+    char ch;
+    ifs >> ch;
+    if (ifs.eof()) {
+        cout << "The file is empty" << endl;
+        this->fileIsEmpty = true;
+        ifs.close();
+        return;
+    }
+
+    this->fileIsEmpty = false;
+
+    ifs.putback(ch);
+
+    string data;
+    int index = 0;
+    while (ifs >> data) {
+        cout << data << endl;
+        vector<string> s;
+        int pos = -1, start = 0;
+
+        while (true) {
+            pos = data.find(",", start);
+            if (pos == -1) break;
+            string temp = data.substr(start, pos - start);
+            s.push_back(temp);
+            start = pos + 1;
+        }
+
+        this->m_Record.insert({index, s});
+        index++;
+    }
+
+    ifs.close();
 }
 
 SpeechManager::~SpeechManager() {
