@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 
 using namespace std;
 
@@ -6,7 +7,7 @@ using namespace std;
 
 int main() {
     
-    srand((unsigned int)time(NULL));
+    srand((unsigned int) time(NULL));
 
     SpeechManager sm;
 
@@ -26,6 +27,7 @@ int main() {
                 sm.showRecord();
                 break;
             case 3:
+                sm.clearRecord();
                 break;
             case 0:
                 sm.exitSystem();
