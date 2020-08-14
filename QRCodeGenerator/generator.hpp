@@ -4,9 +4,24 @@
 #include <cstdint>
 #include <stdexcept>
 
-using namespace std;
+
 
 namespace qrcodeGen {
+
+/*
+ * A segment of character/binary/control data in a QR Code symbol.
+ * Instances of this class are immutable.
+ * 
+ * The mid-level way to create a segment is to take the payload data
+ * and call a static factory function such as QrSegment::makeNumeric().
+ * 
+ * The low-level way to create a segment is to custom-make the bit buffer
+ * and call the QrSegment() constructor with appropriate values.
+ * 
+ * This segment class imposes no length restrictions, but QR Code have restrictions.
+ * Even in the most favorable conditions, a QR Code can only hold 7089 characters of data.
+ * Any segment longer than this is meaningless for the purpose of generation QR Code.
+*/
 
 class QrSegment final {
 /*
@@ -52,6 +67,41 @@ class QrSegment final {
         public: int numCharCountBits(int ver) const;
     };
 
+    /* ---- Static factory functions (mid level) */
+
+    /*
+     * Returns a segment representing the given binary data encoded in 
+     * byte mode. All input byte vectors are acceptable. Any text string
+     * can be converted to UTF-8 bytes and encoded as a byte mode segment.
+    */
+    public: static QrSegment makeBytes(const std::vector<std::uint8_t> &data);
+
+    /*
+     * Returns a segment representing the given string of decimal digits 
+     * encoded in numeric mode
+    */
+    public: static QrSegment makeNumeric(const char* digits);
+
+    /*
+     * Returns a segment representing the given text string encoded in 
+     * alphanumeric mode. The characters allowed are : 0 to 9, 
+     * A to Z (uppercase only), space, dollar, percent, asterisk,
+     * plus, hyphen, period, slash and colon
+    */
+    public: static QrSegment makeAlphanumeric(const char* text);
+
+    /*
+     * Returns a list of zero or more segments to represent the given 
+     * text string. The result may use various segment modes and switch
+     * modes to optimize the length of the bit stream
+    */
+    public: static std::vector<QrSegment> makeSegments(const char *text);
+
+    /*
+     * Returns a segment representing an Extended Channel Interpretation
+     * (ECI) designator with the given assignment value
+    */
+    public: static QrSegment makeEci(long assignVal);
 
 };
 
