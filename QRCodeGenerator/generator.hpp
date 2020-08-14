@@ -67,7 +67,7 @@ class QrSegment final {
         public: int numCharCountBits(int ver) const;
     };
 
-    /* ---- Static factory functions (mid level) */
+    /* ---- Static factory functions (mid level) ---- */
 
     /*
      * Returns a segment representing the given binary data encoded in 
@@ -102,6 +102,28 @@ class QrSegment final {
      * (ECI) designator with the given assignment value
     */
     public: static QrSegment makeEci(long assignVal);
+
+
+    /* ---- Public static helper functions ---- */
+
+    /*
+     * Tests whether the given string can be encoded as a segment in 
+     * alphanumeric mode. 
+     * A string is encodable if each character is in the following set:
+     * 0 to 9, A to Z (uppercase only), space, dollar, percent, asterisk,
+     * plus, hyphen, period, slash and colon
+    */
+    public: static bool isAlphanumeric(const char* text);
+
+    /*
+     * Tests whether the given string can be encoded as a segment in numeric
+     * mode. 
+     * A string is encodable if each character is in the range 0 to 9
+    */
+    public: static bool isNumberic(const char* text);
+
+
+    
 
 };
 
