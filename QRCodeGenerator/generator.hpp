@@ -144,6 +144,24 @@ class QrSegment final {
     */
     private: std::vector<bool> data;
 
+
+    /* ---- Constructors (low level) ---- */
+
+    /*
+     * Create a new QR Code segment with the given attributes and data.
+     * The character count (numCh) must agree with the mode and the bit
+     * buffer length, but the constraint isn't checked. The given bit buffer
+     * is copied and stroed.
+    */
+    public: QrSegment(Mode md, int numCh, const std::vector<bool> &dt);
+
+    /*
+     * Create a new QR Code segment with the given attributes and data.
+     * The character count (numCh) must agree with the mode and the bit
+     * buffer length, but the constraint isn't checked. The given bit buffer
+     * is copied and stroed.
+    */
+    public: QrSegment(Mode md, int numCh, std::vector<bool> &dt);
 };
 
 } // namespace qrcodeGen
