@@ -338,6 +338,43 @@ class QrCode final {
     */
     public: QrCode(int ver, Ecc ecl, const std::vector<std::uint8_t> &dataCodeWords, int msk);
 
-    
+
+    /* ---- Public instance methods ---- */
+
+    /*
+     * Returns this QR Code's version, in the range [1, 40]
+    */
+    public: int getVersion() const;
+
+    /*
+     * Returns this QR Code's size, int the range [21, 177]
+    */
+    public: int getSize() const;
+
+    /*
+     * Returns this QR Code's error correction level
+    */
+    public: Ecc getErrotCorrectionLevel() const;
+
+    /*
+     * Returns this QR Code's mask, in the range [0, 7]
+    */
+    public: int getMask() const;
+
+    /*
+     * Returns the color of the module (pixel) at the given coordinates, which
+     * is false for white or true for black. The top left conner has coordinates
+     * (x = 0, y = 0). If the given coordinates are out of the bound, then false
+     * (white) is returned.
+    */
+    public: bool getModule(int x, int y) const;
+
+    /*
+     * Returns a string of SVG code for an image depicting this QR Code, with
+     * the given number of border modules. The string always uses Unix newlines(\n),
+     * regardless of the platform.
+    */
+    public: std::string toSvgString(int border) const;
+
 };
 } // namespace qrcodeGen
