@@ -223,6 +223,24 @@ class QrSegment final {
  * (Note that all ways require supplying the desired error correction level).
 */
 class QrCode final {
-    
+
+
+    /* ---- Public helper enumeration ---- */
+
+    /*
+     * The error correction level in a QR Code symbol.
+    */
+    public: enum class Ecc {
+        LOW = 0,        // The QR Code can tolerate about  7% erroneous codewords
+        MEDIUM,         // The QR Code can tolerate about 15% erroneous codewords
+        QUARTILE,       // The QR Code can tolerate about 25% erroneous codewords
+        HIGH,           // The QR Code can tolerate about 30% erroneous codewords
+    };
+
+    /*
+     * Returns a value in the range 0 to 3 (unsigned 2-bit integer)  
+    */
+    private: static int getFormatBits(Ecc ecl);
+
 };
 } // namespace qrcodeGen
