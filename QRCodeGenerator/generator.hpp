@@ -264,5 +264,66 @@ class QrCode final {
     */
     public: static QrCode encodeBinary(const std::vector<std::uint8_t> &data, Ecc ecl);
 
+
+    /* ---- Static factory functions (mid level) ---- */
+
+	/* 
+	 * Returns a QR Code representing the given segments with the given encoding parameters.
+	 * The smallest possible QR Code version within the given range is automatically
+	 * chosen for the output. Iff boostEcl is true, then the ECC level of the result
+	 * may be higher than the ecl argument if it can be done without increasing the
+	 * version. The mask number is either between 0 to 7 (inclusive) to force that
+	 * mask, or -1 to automatically choose an appropriate mask (which may be slow).
+	 * This function allows the user to create a custom sequence of segments that switches
+	 * between modes (such as alphanumeric and byte) to encode text in less space.
+	 * This is a mid-level API; the high-level API is encodeText() and encodeBinary().
+	*/
+    public: static QrCode encodeSegments(const std::vector<QrSegment> &segs, Ecc ecl, 
+                                         int minVersion = 1, int maxVersion = 40, int mask = -1,
+                                         bool boostEcl = true);         // All optional parameters
+    
+
+    /* ---- Instance fields ---- */
+
+    // Immutable scalar parameters
+
+    /*
+     * The version number of this QR Code, which is between 1 to 40 (inclusive).
+     * This determines the size of this barcode.
+    */
+    private: int version;
+
+    /*
+     * The width and height of this QR Code, measured in modules, 
+     * between 21 and 177 (inclusive). This is equal to version * 4 + 17
+    */
+    private: int size;
+
+    /*
+     * The error correction level used in this QR Code
+    */
+    private: Ecc errorCorrectionLevel;
+
+    /*
+     * The index of the mask pattern used in this QR Code, which is
+     * between 0 and 7 (inclusive). Even if a QR Code is created with 
+     * automatic masking requested (mask = -1), the resulting object
+     * still has a mask value between 0 and 7.
+    */
+    private: int mask;
+
+    // Private grids of modules/pixels, with dimensions of size * size
+
+    /*
+     * The modules of this QR Code (false = white, true = black)
+     * Immutable after constructor finishes. Accessed through getModule()
+    */
+    private: std::vector<std::vector<bool>> modules;
+
+    /*
+     * Indicates function modules that are not subjected to masking. 
+     * Discarded when constructor finished
+    */
+    private: std::vector<std::vector<bool>> isFunction;
 };
 } // namespace qrcodeGen
