@@ -202,4 +202,27 @@ class QrSegment final {
     private: static const char* ALPHANUMERIC_CHARSET;
 };
 
+
+/*
+ * A QR Code symbol, which is a type of two-dimension barcode.
+ * Invented by Dense Wave and describe in the ISO/IEC 18004 standard.
+ * Instances of this class represents an immutable square grid of 
+ * black and white cells. The class provide static factory functions 
+ * to create a QR Code from text or binary data. The class covers the 
+ * QR Code Model 2 specification, supporting all versions (sizes)
+ * from 1 to 40, all 4 error correction levels, and 4 character 
+ * encoding nodes.
+ * 
+ * Ways to create a QR Code objects:
+ * - High level: Take the payload data and call QrCode::encodeText() or QrCode::encodeBinary().
+ * - Mid level: Custom-make the list of segments and call QrCode::encodeSegment().
+ * - Low level: Custom-make the array if data codeword bytes(including 
+ *              segment headers and final padding, excluding error correction
+ *              codewords), supply the appropriate version number, and call the 
+ *              QrCode() constructor.
+ * (Note that all ways require supplying the desired error correction level).
+*/
+class QrCode final {
+    
+};
 } // namespace qrcodeGen
