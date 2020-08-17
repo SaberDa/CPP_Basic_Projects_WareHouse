@@ -31,14 +31,14 @@ class QrSegment final {
  * Immutable
 */
     public: class Mode final {
-        /* Constants */ 
+        /* ---- Constants ---- */ 
         public: static const Mode NUMERIC;
         public: static const Mode ALPHANUMERIC;
         public: static const Mode BYTE;
         public: static const Mode KANJI;
         public: static const Mode ECI;
 
-        /* Fields */ 
+        /* ---- Fields ---- */ 
 
         // The mode indicator bits, which is a uint4 value (range 0 to 15)
         private: int modeBits;
@@ -49,7 +49,7 @@ class QrSegment final {
         /* Constructor */
         private: Mode(int mode, int cc0, int cc1, int cc2);
 
-        /* Methods */
+        /* ---- Methods ---- */
 
         /*
          * (Package private)
@@ -123,7 +123,26 @@ class QrSegment final {
     public: static bool isNumberic(const char* text);
 
 
-    
+    /* ---- Instance fields ---- */
+
+    /*
+     * The mode indicator of this segment. Accessed through getMode().
+    */
+    private: Mode mode;
+
+    /*
+     * The length of this segment's unencoded data. Measured in characters 
+     * for numeric/alphanumeric/kanji mode, bytes for byte mode, 
+     * and 0 for ECI mode. Always zero or positive. Not the same as the data's
+     * bit length.
+     * Accessed through getNumChars().
+    */
+    private: int numChars;
+
+    /*
+     * The data bits of this segment. Accessed through getData().
+    */
+    private: std::vector<bool> data;
 
 };
 
