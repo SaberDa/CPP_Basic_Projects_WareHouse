@@ -243,7 +243,7 @@ class QrCode final {
     private: static int getFormatBits(Ecc ecl);
 
 
-    /* ---- Public helper enumeration ---- */
+    /* ---- Static factory functions (high level) ---- */
 
     /*
      * Returns a QR Code representing the given Unicode text string at the given error correction level.
