@@ -325,5 +325,19 @@ class QrCode final {
      * Discarded when constructor finished
     */
     private: std::vector<std::vector<bool>> isFunction;
+
+
+    /* ---- Constructure (low level) ---- */
+
+    /*
+     * Creates a new QR Code with the given version number, error
+     * correction level, data codeword bytes, and mask number.
+     * This is a low-level API that most users shoule not use 
+     * directly. 
+     * A mid-level API is the encodeSegment() function.
+    */
+    public: QrCode(int ver, Ecc ecl, const std::vector<std::uint8_t> &dataCodeWords, int msk);
+
+    
 };
 } // namespace qrcodeGen
