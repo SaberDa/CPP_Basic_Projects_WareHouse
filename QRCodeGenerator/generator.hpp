@@ -162,6 +162,44 @@ class QrSegment final {
      * is copied and stroed.
     */
     public: QrSegment(Mode md, int numCh, std::vector<bool> &dt);
+
+    
+    /* ---- Method ---- */
+
+    /*
+     * Returns the mode field of this segment.
+    */
+    public: Mode getMode() const;
+
+    /*
+     * Returns the character const field of this segment.
+    */
+    public: int getNumChars() const;
+
+    /*
+     * Returns the data bits of this segment.
+    */
+    public: const std::vector<bool> &getData() const;
+
+    /*
+     * (Package Private)
+     * Calculates the number of bits needed to encode the given 
+     * segments at the given version. Returns a non-negative number
+     * if successful. Otherwise returns -1 if a segment has too many 
+     * characters to fit its length field, or the total bits exceeds
+     * INT_MAX.
+    */
+    public: static int getTotalBits(const std::vector<QrSegment> &segs, int version);
+
+
+    /* ---- Private constant ---- */
+
+    /*
+     * The set of all legal characters in alphanumeric mode, 
+     * where each character value maps to the index in the 
+     * string. 
+    */
+    private: static const char* ALPHANUMERIC_CHARSET;
 };
 
 } // namespace qrcodeGen
