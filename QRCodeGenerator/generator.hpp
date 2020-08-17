@@ -242,5 +242,27 @@ class QrCode final {
     */
     private: static int getFormatBits(Ecc ecl);
 
+
+    /* ---- Public helper enumeration ---- */
+
+    /*
+     * Returns a QR Code representing the given Unicode text string at the given error correction level.
+     * As a conservation upper bound, this function is guaranteed to succeed for strings 
+     * that have 2953 or fewer UTF-8 code units (not Unicode code points) if the 
+     * low error correctino level is used. The smallest possible QR Code version is automatically 
+     * chosen for the output. The ECC level of the result may be higher than the ECL argument if
+     * it can be done without increasing the version.
+    */
+    public: static QrCode encodeText(const char* text, Ecc ecl);
+
+    /*
+     * Returns a QR Code representing the given binary data at the given error correction level.
+     * This function always encodes using the binary segment mode, not ant text mode. The maximum
+     * number of bytes allowed is 2953. The smallest possible QR Code version is automatically
+     * chosen for the output. The ECC level of the result may be higher than the ecl argument 
+     * if it can be done without increasing the version.
+    */
+    public: static QrCode encodeBinary(const std::vector<std::uint8_t> &data, Ecc ecl);
+
 };
 } // namespace qrcodeGen
