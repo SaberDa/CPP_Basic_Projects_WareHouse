@@ -453,5 +453,74 @@ class QrCode final {
     */
     private: long getPenaltyScore() const;
 
+
+    /* ---- Private helper functions ---- */
+
+    /*
+     * Returns an ascending list of positions of alignment patterns for this version 
+     * number. Each position is in the range [0, 177), and are used on both x and y 
+     * axes. This could be implemented as lookup table of 40 variable-length lists
+     * of unsigned bytes.
+    */
+    private: std::vector<int> getAlignmentPatternPositions() const;
+
+    /*
+     * Returns the number of data bits that can be stored in a QR Code of the given 
+     * version number, after all function modules are excluded. This function remainder 
+     * bits, so it might not be a multiple of 8. The result is in the range [208, 29648].
+     * This could be implement as a 40-entry lookup table.
+    */
+    private: static int getNumRawDataModule(int ver);
+    
+    /*
+     * Returns the number of 8-bit data (i.e. not error correction) codewords contained
+     * in any QR Code of the given version number and error correction level, with
+     * remainder bits discarded. This stateless pure function could be implemented as
+     * a (40 * 4) - cell lookup table.
+    */
+    private: static int getNumDataCodewords(int ver, Ecc ecl);
+
+    /*
+     * Returns a Reed-Solomon ECC generator polynomial for the given degree. This could
+     * be implemented as a lookup table over all possible parameter values, instead of as 
+     * an algorithm
+    */
+    private: static std::vector<std::uint8_t> reedSolomonComputeDivisor(int degree);
+
+    /*
+     * Returns the Reed-Solomon error correction codeword for the given data and divisor
+     * polynomial.
+    */
+    private: static std::vector<std::uint8_t> reedSolomonComputeRemainder(const std::vector<std::uint8_t> &data, const std::vector<std::uint8_t> &divisor);
+
+    /*
+     * Returns the product of the two given field elements module GF(2^8 / 0x11D)
+     * All input are valid. This could be implement as a 256 * 256 lookup table.
+    */
+    private: static std::uint8_t reedSolomonMultiply(std::uint8_t x, std::uint8_t y);
+
+    /*
+     * Can only be called immediately after a white run is added, and returns
+     * either 0, 1, or 2. A helper function for getPenaltyScore()
+    */
+    private: int finderPenaltyCountPatterns(const std::array<int, 7> &runHistory) const;
+
+    /*
+     * Must be called at the end of a line (row or column) of modules. 
+     * A helper function for getPenaltyScore()
+    */
+    private: int finderPenaltyTerminateAndCount(bool currentRunColor, int currentRunLength, std::array<int, 7> &runHistory) const;
+
+    /*
+     * Pushes the given value to the front and drops the last value. 
+     * A helper function for getPenaltyScore()
+    */
+    private: void finderPenaltyAddHistory(int currentRunLength, std::array<int, 7> &runHistory) const;
+
+    /*
+     * Returns true if the i'th bit of x is set to 1
+    */
+    private: static bool getBit(long x, int i);
+
 };
 } // namespace qrcodeGen
