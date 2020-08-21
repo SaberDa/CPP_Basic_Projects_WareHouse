@@ -92,4 +92,22 @@ vector<QrSegment> QrSegment::makeSegments(const char* text) {
     return result;
 }
 
+QrSegment QrSegment::makeEci(long assignVal) {
+    BitBuffer bb;
+
+    if (assignVal < 0) throw std::domain_error("ECI assignment value out of range");
+    else if (assignVal < (1 << 7)) bb.appendBits(static_cast<uint32_t>(assignVal), 8);
+    else if (assignVal < (1 << 14)) {
+        bb.appendBits(2, 2);
+        bb.appendBits(static_cast<uint32_t>(assignVal), 14);
+    } else if (assignVal < 1000000L) {
+        bb.appendBits(6, 3);
+        bb.appendBits(static_cast<uint32_t>(assignVal), 21);
+    } else {
+        throw std::domain_error("ECI assignment value ouf of range");
+    }
+
+    return QrSegment(Mode::ECI, 0, std::move(bb));
+}
+
 }
