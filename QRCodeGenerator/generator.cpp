@@ -110,18 +110,21 @@ QrSegment QrSegment::makeEci(long assignVal) {
     return QrSegment(Mode::ECI, 0, std::move(bb));
 }
 
-QrSegment::QrSegment(Mode md, int numCh, const std::vector<bool> &dt) {
-    mode = md;
-    numChars = numCh;
-    data = dt;
-    if (numCh < 0) throw std::domain_error("Invalid Value");
+QrSegment::QrSegment(Mode md, int numCh, const std::vector<bool> &dt) :
+		mode(md),
+		numChars(numCh),
+		data(dt) {
+	if (numCh < 0)
+		throw std::domain_error("Invalid value");
 }
 
-QrSegment::QrSegment(Mode md, int numCh, std::vector<bool> &dt) {
-    mode = md;
-    numChars = numCh;
-    data = std::move(dt);
-    if (numCh < 0) throw std::domain_error("Invalid Value");
-} 
+
+QrSegment::QrSegment(Mode md, int numCh, std::vector<bool> &&dt) :
+		mode(md),
+		numChars(numCh),
+		data(std::move(dt)) {
+	if (numCh < 0)
+		throw std::domain_error("Invalid value");
+}
 
 }

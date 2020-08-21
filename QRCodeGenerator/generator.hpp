@@ -6,7 +6,7 @@
 
 
 
-namespace qrcodeGen {
+namespace qrcodegen {
 
 /*
  * A segment of character/binary/control data in a QR Code symbol.
@@ -161,7 +161,7 @@ class QrSegment final {
      * buffer length, but the constraint isn't checked. The given bit buffer
      * is copied and stroed.
     */
-    public: QrSegment(Mode md, int numCh, std::vector<bool> &dt);
+    public: QrSegment(Mode md, int numCh, std::vector<bool> &&dt);
 
     
     /* ---- Method ---- */
