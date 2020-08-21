@@ -421,11 +421,37 @@ class QrCode final {
     private: bool module(int x, int y) const;
 
 
-
+    /* ---- Private helper methods for constructor: Codewords and masking ---- */
 
     /*
-     * 
+     * Returns a new byte string representing the given data with the 
+     * appropiate error correction codewords appended to it, based on
+     * this object's version and error correction level
     */
+    private: std::vector<std::uint8_t> addEccAndInterleave(const std::vector<std::uint8_t> &data) const;
+
+    /*
+     * Draws the given sequence of 8-bit codewords (data and error correction)
+     * onto the entire data area of this QR Code. Function modules need to be
+     * marked off before this is called.
+    */
+    private: void drawCodewords(const std::vector<std::uint8_t> &data);
+
+    /*
+     * XORs the codewords modules in this QR Code with the given mask pattern.
+     * The function modules must be masked and the codeword bits must be drawn
+     * before masking. Due to the arithmetic of XOR, calling applyMask() with 
+     * the same mask value a second time will undo the mask. A final well-formed
+     * QR Code needs exactly one (not zero, two, etc) mask applied. 
+    */
+    private: void applyMask(int msk);
+
+    /*
+     * Calculate and returns the penalty score based on state of this QR Code's
+     * current modules. This is used by the automatic mask choice algorithm
+     * to find the mask pattern that fields are lowest score.
+    */
+    private: long getPenaltyScore() const;
 
 };
 } // namespace qrcodeGen
