@@ -376,5 +376,56 @@ class QrCode final {
     */
     public: std::string toSvgString(int border) const;
 
+
+    /* ---- Private helper methods for constructor: Drawing function modules ---- */
+
+    /*
+     * Reads this object's version field, and draws and marks all function modules
+    */
+    private: void drawFunctionPatterns();
+
+    /*
+     * Draws two copies of the format bits (with its own error correction code)
+     * based on the given mask and this object's error correction level field.
+    */
+    private: void drawFormatBits(int msk);
+
+    /*
+     * Draws two copies of the version bits (with its own error correction code)
+     * based on this object's version field, if 7 <= version <= 40 
+    */
+    private: void drawVersion();
+
+    /*
+     * Draws a 9 * 9 finder pattern including the border separator, 
+     * with the center module at (x, y). Modules can be out of bounds.
+    */
+    private: void drawFinderPattern(int x, int y);
+
+    /*
+     * Draws a 5 * 5 alignment pattern, with the center module at (x, y).
+     * All modules must be in bounds.
+    */
+    private: void drawAlignmentPattern(int x, int y);
+
+    /*
+     * Sets the color of a module and marks it as a function module.
+     * Only used by the constructor. Coordinates must by in bound.
+    */
+    private: void setFunctionModule(int x, int y, bool isBlack);
+
+    /*
+     * Returns the color of the module at the given coordinates, 
+     * which must be in range.
+    */
+    private: bool module(int x, int y) const;
+
+
+
+
+    /*
+     * 
+    */
+
 };
 } // namespace qrcodeGen
