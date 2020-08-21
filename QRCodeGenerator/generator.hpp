@@ -547,4 +547,44 @@ class QrCode final {
     private: static const std::int8_t NUM_ERROR_CORRECTION_BLOCKS[4][41];
 
 };
+
+
+/* ---- Public Exception Class ---- */
+
+/* 
+ * Thrown when the supplied data does not fit any QR Code version. Ways to handle this exception include:
+ * - Decrease the error correction level if it was greater than Ecc::LOW.
+ * - If the encodeSegments() function was called with a maxVersion argument, then increase
+ *   it if it was less than QrCode::MAX_VERSION. (This advice does not apply to the other
+ *   factory functions because they search all versions up to QrCode::MAX_VERSION.)
+ * - Split the text data into better or optimal segments in order to reduce the number of bits required.
+ * - Change the text or binary data to be shorter.
+ * - Change the text to fit the character set of a particular segment mode (e.g. alphanumeric).
+ * - Propagate the error upward to the caller/user.
+ */
+class data_too_long : public std::length_error {
+    public: explicit data_too_long(const std::string &msg);
+};
+
+/*
+ * An appendable sequence of bits (0s and 1s). Mainly used by QrSegment
+*/
+class BitBuffer final : public std::vector<bool> {
+    /* ---- Constructor ---- */
+    
+    /*
+     * Creates an empty bits buffer (length 0)
+    */
+    public: BitBuffer();
+
+    /* ---- Methods ---- */
+
+    /*
+     * Appends the given number of low-order bits of the given value
+     * to this buffer. Requires 0 <= len <= 31 and val <= 2 ^ len
+    */
+    public: void appendBits(std::uint32_t val, int len);
+    
+};
+
 } // namespace qrcodeGen
