@@ -45,5 +45,32 @@ QrSegment QrSegment::makeBytes(const vector<uint8_t> &data) {
     return QrSegment(Mode::BYTE, static_cast<int>(data.size()), std::move(bb));
 }
 
+QrSegment QrSegment::makeAlphanumeric(const char* text) {
+    BitBuffer bb;
+    int accumData = 0;
+    int accumCount = 0;
+    int charCount = 0;
+
+    for (; *text != '\0'; text++, charCount++) {
+        const char* temp = std::strchr(ALPHANUMERIC_CHARSET, *text);
+        if (temp == nullptr) {
+            throw std::domain_error("String contains unencodable character in alphanumeric");
+        }
+        accumData = accumData * 45 + static_cast<int>(temp - ALPHANUMERIC_CHARSET);
+        accumCount++;
+        if (accumCount == 2) {
+            bb.appendBits(static_cast<uint32_t>(accumCount), 11);
+            accumCount = 0;
+            accumData = 0;
+        }
+    }
+
+    // 1 character remaining
+    if (accumCount > 0) {
+        bb.appendBits(static_cast<uint32_t>(accumData), 6);
+    }
+
+    return QrSegment(Mode::ALPHANUMERIC, charCount, std::move(bb));
+}
 
 }
