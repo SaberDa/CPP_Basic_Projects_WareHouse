@@ -73,4 +73,23 @@ QrSegment QrSegment::makeAlphanumeric(const char* text) {
     return QrSegment(Mode::ALPHANUMERIC, charCount, std::move(bb));
 }
 
+vector<QrSegment> QrSegment::makeSegments(const char* text) {
+    // Select the most efficient segment encoding automatically
+    vector<QrSegment> result;
+
+    // Leave result empty
+    if (*text == '\0');
+    else if (isNumberic(text)) result.push_back(makeNumeric(text));
+    else if (isAlphanumeric(text)) result.push_back(makeAlphanumeric(text));
+    else {
+        vector<uint8_t> bytes;
+        for (; *text != '\0'; text++) {
+            bytes.push_back(static_cast<uint8_t>(*text));
+        }
+        result.push_back(makeBytes(bytes));
+    }
+
+    return result;
+}
+
 }
