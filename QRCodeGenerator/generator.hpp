@@ -522,5 +522,29 @@ class QrCode final {
     */
     private: static bool getBit(long x, int i);
 
+
+    /* ---- Constants and Tables ---- */
+
+    /*
+     * The minimun version number supported in the QR Code Model 2 standred
+    */
+    public: static constexpr int MIN_VERSION = 1;
+
+    /*
+     * The maximum version number supported in the QR Code Model 2 standred
+    */
+    public: static constexpr int MAX_VERSION = 40;
+
+    /*
+     * For use in getPenaltyScore(), when evaluating which mask is best
+    */
+    private: static const int PENALTY_N1;
+    private: static const int PENALTY_N2;
+    private: static const int PENALTY_N3;
+    private: static const int PENALTY_N4;
+
+    private: static const std::int8_t ECC_CODEWORDS_PRE_BLOCK[4][41];
+    private: static const std::int8_t NUM_ERROR_CORRECTION_BLOCKS[4][41];
+
 };
 } // namespace qrcodeGen
