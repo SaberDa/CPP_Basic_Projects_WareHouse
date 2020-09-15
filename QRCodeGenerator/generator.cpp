@@ -143,4 +143,11 @@ int QrSegment::getTotalBits(const vector<QrSegment> &segs, int version) {
     return result;
 }
 
+bool QrSegment::isAlphanumeric(const char *text) {
+    for (; *text != '\0'; text++) {
+        if (std::strchr(ALPHANUMERIC_CHARSET, *text) == nullptr) return false;
+    }
+    return true;
+}
+
 }
