@@ -127,4 +127,20 @@ QrSegment::QrSegment(Mode md, int numCh, std::vector<bool> &&dt) :
 		throw std::domain_error("Invalid value");
 }
 
+int QrSegment::getTotalBits(const vector<QrSegment> &segs, int version) {
+    int result = 0;
+    for (const QrSegment &seg : segs) {
+        int ccbits = seg.mode.numCharCountBits(version);
+        // The segment's length doesn't fit the field's bit width
+        if (seg.numChars >= (1L << ccbits)) return -1;
+        // The sum will overflow an int type
+        if (4 + ccbits > INT_MAX - result) return -1;
+        result += 4 + ccbits;
+        // The sum will overflow an int type
+        if (seg.data.size() > static_cast<unsigned int>(INT_MAX - result)) return -1;
+        result += static_cast<int>(seg.data.size());
+    }
+    return result;
+}
+
 }
