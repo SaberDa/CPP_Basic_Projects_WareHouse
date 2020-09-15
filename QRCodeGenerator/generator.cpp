@@ -150,4 +150,27 @@ bool QrSegment::isAlphanumeric(const char *text) {
     return true;
 }
 
+bool QrSegment::isNumberic(const char *text) {
+    for (; *text != '\0'; text++) {
+        char c = *text;
+        if (c < '0' || c > '9') return false;
+    }
+    return true;
+}
+
+QrSegment::Mode QrSegment::getMode() const {
+    return mode;
+}
+
+int QrSegment::getNumChars() const {
+    return numChars;
+}
+
+const std::vector<bool> &QrSegment::getData() const {
+    return data;
+}
+
+const char *QrSegment::ALPHANUMERIC_CHARSET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:";
+
+
 }
