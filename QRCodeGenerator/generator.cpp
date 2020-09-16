@@ -187,6 +187,81 @@ int QrCode::getFormatBits(Ecc ecl) {
     }
 }
 
+QrCode QrCode::encodeText(const char *text, Ecc ecl) {
+    vector<QrSegment> segs = QrSegment::makeSegments(text);
+    return encodeSegments(segs, ecl);
+}
+
+QrCode QrCode::encodeBinary(const vector<uint8_t> &data, Ecc ecl) {
+    vector<QrSegment> segs{QrSegment::makeBytes(data)};
+    return encodeSegments(segs, ecl);
+}
+
+QrCode QrCode::encodeSegments(const vector<QrSegment> &segs, Ecc ecl,
+                int minVersion, int maxVersion, int mask, bool boostEcl) {
+    if (!(minVersion >= MIN_VERSION && maxVersion <= MAX_VERSION && maxVersion >= minVersion) || mask < -1 || mask > 7) {
+        throw std::invalid_argument("Invalid value");
+    }
+
+    // Find the minimal version number to use
+    int version, dataUseBits;
+    for (version = minVersion; ; version++) {
+        // number of data bits available
+        int dataCapacityBits = getNumDataCodewords(version, ecl) * 8;
+        dataUseBits = QrSegment::getTotalBits(segs, version);
+        if (dataUseBits != -1 && dataUseBits <= dataCapacityBits) break;
+        if (version >= maxVersion) {
+            std::ostringstream sb;
+            if (dataUseBits == -1) sb << "Segment too long";
+            else {
+                sb << "Data length = " << dataUseBits << " bits, ";
+                sb << "Max capacity = " << dataCapacityBits << " bits";
+            }
+            throw data_too_long(sb.str());
+        }
+    }
+    if (dataUseBits == -1) throw std::logic_error("Assertion error");
+
+    // Increase the error correction level while the data still fits in the current version number
+    // From low to high
+    for (Ecc newEcl : vector<Ecc>{Ecc::MEDIUM, Ecc::QUARTILE, Ecc::HIGH}) {
+        if (boostEcl && dataUseBits <= getNumDataCodewords(version, newEcl) * 8) {
+            ecl = newEcl;
+        }
+    }
+
+    // Concatenate all segments to create the data bit string
+    BitBuffer bb;
+    for (const QrSegment &seg : segs) {
+        bb.appendBits(static_cast<uint32_t>(seg.getMode().getModeBits()), 4);
+        bb.appendBits(static_cast<uint32_t>(seg.getNumChars()), seg.getMode().numCharCountBits(version));
+        bb.insert(bb.end(), seg.getData().begin(), seg.getData().end());
+    }
+    if (bb.size() != static_cast<unsigned int>(dataUseBits)) {
+        throw std::logic_error("Assertion error");
+    }
+
+    // Add terminator and pad up to a byte if applicable
+    size_t dataCapacityBits = static_cast<size_t>(getNumDataCodewords(version, ecl)) * 8;
+    if (bb.size() > dataCapacityBits) throw std::logic_error("Assertion error");
+    bb.appendBits(0, std::min(4, static_cast<int>(dataCapacityBits - bb.size())));
+    bb.appendBits(0, (8 - static_cast<int>(bb.size() % 8)) % 8);
+    if (bb.size() % 8 != 0) throw std::logic_error("Assertion error");
+
+    // Pad with alternation bytes until data capacity is reached
+    for (uint8_t padByte = 0xEC; bb.size() < dataCapacityBits; padByte ^= 0xEC ^ 0x11) {
+        bb.appendBits(padByte, 8);
+    }
+
+    // Pack bits into bytes in big endian
+    vector<uint8_t> dataCodewords(bb.size() / 8);
+    for (size_t i = 0; i < bb.size(); i++) {
+        dataCodewords[i >> 3] |= (bb.at(i) ? 1 : 0) << (7 - (i & 7));
+    }
+
+    // Create the QR code object
+    return QrCode(version, ecl, dataCodewords, mask);
+}
 
 
 }
