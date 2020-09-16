@@ -395,4 +395,23 @@ void QrCode::drawFormatBits(int msk) {
     setFunctionModule(8, size - 8, true);   // Always black
 }
 
+void QrCode::drawVersion() {
+    if (version < 7) return;
+
+    // Calculate error correction code and pack bits
+    int rem = version;      // version is uint6, in the range [7, 40]
+    for (int i = 0; i < 12; i++) rem = (rem << 1) ^ ((rem >> 11) * 0x1F25);
+    long bits = static_cast<long>(version) << 12 | rem;     // uint18
+    if (bits >> 18 != 0) throw std::logic_error("Assertion error");
+
+    // Draw two copies
+    for (int i = 0; i < 18; i++) {
+        bool bit = getBit(bits, i);
+        int a  = size - 11 + i % 3;
+        int b = i / 3;
+        setFunctionModule(a, b, bit);
+        setFunctionModule(b, a, bit);
+    }
+}
+
 }
