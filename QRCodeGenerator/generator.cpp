@@ -263,5 +263,45 @@ QrCode QrCode::encodeSegments(const vector<QrSegment> &segs, Ecc ecl,
     return QrCode(version, ecl, dataCodewords, mask);
 }
 
+QrCode::QrCode(int ver, Ecc ecl, const vector<uint8_t> &dataCodewords, int msk) :
+        version(ver), errorCorrectionLevel(ecl) {
+    if (ver < MIN_VERSION || ver > MAX_VERSION) throw std::domain_error("Version value out of range");
+    if (msk < -1 || msk > 7) throw std::domain_error("Mask value out of range");
+    size = ver * 4 + 17;
+    size_t sz = static_cast<size_t>(size);
+    // Initially with all white
+    modules = vector<vector<bool>>(sz, vector<bool>(sz));
+    isFunction = vector<vector<bool>>(sz, vector<bool>(sz));
+
+    // Compute Ecc, draw modules
+    drawFunctionPatterns();
+    const vector<uint8_t> allCodewords = addEccAndInterleave(dataCodewords);
+    drawCodewords(allCodewords);
+
+    // Do masking
+    if (msk == -1) {
+        // Automatically choose best mask
+        long minPenalty = LONG_MAX;
+        for (int i = 0; i < 8; i++) {
+            applyMask(i);
+            drawFormatBits(i);
+            long penalty = getPenaltyScore();
+            if (penalty < minPenalty) {
+                msk = i;
+                minPenalty = penalty;
+            }
+            applyMask(i);
+        }
+    }
+    if (msk < 0 || msk > 7) throw std::logic_error("Assertion error");
+    this->mask = msk;
+    // Apply the final choice of mask
+    applyMask(msk);
+    // Overwrite old format bits
+    drawFormatBits(msk);
+
+    isFunction.clear();
+    isFunction.shrink_to_fit();
+}
 
 }
