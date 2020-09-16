@@ -354,7 +354,7 @@ class QrCode final {
     /*
      * Returns this QR Code's error correction level
     */
-    public: Ecc getErrotCorrectionLevel() const;
+    public: Ecc getErrorCorrectionLevel() const;
 
     /*
      * Returns this QR Code's mask, in the range [0, 7]

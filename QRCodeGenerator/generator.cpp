@@ -304,4 +304,16 @@ QrCode::QrCode(int ver, Ecc ecl, const vector<uint8_t> &dataCodewords, int msk) 
     isFunction.shrink_to_fit();
 }
 
+int QrCode::getVersion() const { return version; }
+
+int QrCode::getSize() const { return size; }
+
+QrCode::Ecc QrCode::getErrorCorrectionLevel() const { return errorCorrectionLevel; }
+
+int QrCode::getMask() const { return mask; }
+
+bool QrCode::getModule(int x, int y) const {
+    return x >= 0 && x < size && y >= 0 && y < size && module(x, y);
+}
+
 }
