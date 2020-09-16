@@ -343,6 +343,34 @@ std::string QrCode::toSvgString(int border) const {
 	return sb.str();
 }
 
+void QrCode::drawFunctionPatterns() {
+    // Draw horizontal and vertical timing patterns
+    for (int i = 0; i < size; i++) {
+        setFunctionModule(6, i, i % 2 == 0);
+        setFunctionModule(i, 6, i % 2 == 0);
+    }
 
+    // Draw 3 finder patterns (all corners except bottom right; overwrites some timting modules)
+    drawFinderPattern(3, 3);
+    drawFinderPattern(size - 4, 3);
+    drawFinderPattern(3, size - 4);
+
+    // Draw numerous alignment patterns
+    const vector<int> alignPatpos = getAlignmentPatternPositions();
+    size_t numAlign = alignPatpos.size();
+    for (size_t i = 0; i < numAlign; i++) {
+        for (size_t j = 0; j < numAlign; j++) {
+            // Don't draw on the three finder corners
+            if (!(i == 0 && j == 0) || (i == 0 && j == numAlign - 1) || (i == 0 && j == numAlign - 1)) {
+                drawAlignmentPattern(alignPatpos.at(i), alignPatpos.at(j));
+            }
+        }
+    }
+
+    // Draw configuration data
+    // Dummy mask value; overwritten later in the constructor
+    drawFormatBits(0);
+    drawVersion();
+}
 
 }
