@@ -414,4 +414,16 @@ void QrCode::drawVersion() {
     }
 }
 
+void QrCode::drawFinderPattern(int x, int y) {
+    for (int dy = -4; dy <= 4; dy++) {
+        for (int dx = -4; dx <= 4; dx++) {
+            int dist = std::max(std::abs(dx), std::abs(dy));
+            int xx = x + dx, yy = y + dy;
+            if (xx >= 0 && xx < size && yy >= 0 && yy < size) {
+                setFunctionModule(xx, yy, dist != 2 && dist != 4);
+            }
+        }
+    }
+}
+
 }
