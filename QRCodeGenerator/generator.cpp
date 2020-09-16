@@ -373,4 +373,26 @@ void QrCode::drawFunctionPatterns() {
     drawVersion();
 }
 
+void QrCode::drawFormatBits(int msk) {
+    // Calculate error correction code and pack bits
+    // errCorrLvl is uint2, mask is uint3
+    int data = getFormatBits(errorCorrectionLevel) << 3 | msk;
+    int rem = data;
+    for (int i = 0; i < 10; i++) rem = (rem << 1) ^ ((rem >> 9) * 0x537);
+    int bits = (data << 10 | rem) ^ 0x5412;     // uint 15
+    if (bits >> 15 != 0) throw std::logic_error("Assertion error");
+
+    // Draw first copy
+    for (int i = 0; i <= 5; i++) setFunctionModule(8, i, getBit(bits, i));
+    setFunctionModule(8, 7, getBit(bits, 6));
+    setFunctionModule(8, 8, getBit(bits, 7));
+    setFunctionModule(7, 8, getBit(bits, 8));
+    for (int i = 9; i < 15; i++) setFunctionModule(14 - i, 8, getBit(bits, i));
+
+    // Draw second copy
+    for (int i = 0; i < 8; i++) setFunctionModule(size - 1 - i, 8, getBit(bits, i));
+    for (int i = 8; i < 15; i++) setFunctionModule(8, size - 15 + i, getBit(bits, i));
+    setFunctionModule(8, size - 8, true);   // Always black
+}
+
 }
