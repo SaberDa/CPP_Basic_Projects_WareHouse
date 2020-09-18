@@ -675,4 +675,15 @@ vector<uint8_t> QrCode::reedSolomonComputeRemainder(const vector<uint8_t> &data,
     return result;
 }
 
+uint8_t QrCode::reedSolomonMultiply(uint8_t x, uint8_t y) {
+    // Russian peasant multiplication
+    int z = 0;
+    for (int i = 7; i >= 0; i--) {
+        z = (z << 1) ^ ((z >> 7) * 0x11D);
+        z ^= ((y >> i) & i) * x;
+    }
+    if (z >> 8 != 0) throw std::logic_error("Assertion error");
+    return static_cast<uint8_t>(z);
+}
+
 }
