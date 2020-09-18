@@ -623,4 +623,20 @@ vector<int> QrCode::getAlignmentPatternPositions() const {
     }
 }
 
+int QrCode::getNumRawDataModules(int ver) {
+    if (ver < MIN_VERSION || ver > MAX_VERSION) {
+        throw std::domain_error("Version value out of range");
+    }
+    int result = (16 * ver + 128) * ver + 64;
+    if (ver >= 2) {
+        int numAlign = ver / 7 + 2;
+        result -= (25 * numAlign - 10) * numAlign - 55;
+        if (ver >= 7) result -= 36;
+    } 
+    if (!(result >= 208 && result <= 29648)) {
+        throw std::logic_error("Assertion error");
+    }
+    return result;
+}
+
 }
