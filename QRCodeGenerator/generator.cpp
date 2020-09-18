@@ -608,4 +608,19 @@ long QrCode::getPenaltyScore() const {
 
 }
 
+vector<int> QrCode::getAlignmentPatternPositions() const {
+    if (version == 1) return vector<int>();
+    else {
+        int numAlign = version / 7 + 2;
+        int step = (version == 32) ? 26 :
+            (version * 4 + numAlign * 2 + 1) / (numAlign * 2 - 2) * 2;
+        vector<int> result;
+        for (int i = 0, pos = size - 7; i < numAlign - 1; i++, pos -= step) {
+            result.insert(result.begin(), pos);
+        }
+        result.insert(result.begin(), 6);
+        return result;
+    }
+}
+
 }
