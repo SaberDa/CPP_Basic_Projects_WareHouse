@@ -44,7 +44,7 @@ class QrSegment final {
         private: int modeBits;
 
         // Number of character count bits for three different version ranges
-        private: int numBitCharCount[3];
+        private: int numBitsCharCount[3];
 
         /* Constructor */
         private: Mode(int mode, int cc0, int cc1, int cc2);
@@ -120,7 +120,7 @@ class QrSegment final {
      * mode. 
      * A string is encodable if each character is in the range 0 to 9
     */
-    public: static bool isNumberic(const char* text);
+    public: static bool isNumeric(const char* text);
 
 
     /* ---- Instance fields ---- */
@@ -543,7 +543,7 @@ class QrCode final {
     private: static const int PENALTY_N3;
     private: static const int PENALTY_N4;
 
-    private: static const std::int8_t ECC_CODEWORDS_PRE_BLOCK[4][41];
+    private: static const std::int8_t ECC_CODEWORDS_PER_BLOCK[4][41];
     private: static const std::int8_t NUM_ERROR_CORRECTION_BLOCKS[4][41];
 
 };
