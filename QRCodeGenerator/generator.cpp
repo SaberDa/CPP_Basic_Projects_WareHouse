@@ -686,4 +686,35 @@ uint8_t QrCode::reedSolomonMultiply(uint8_t x, uint8_t y) {
     return static_cast<uint8_t>(z);
 }
 
+int QrCode::finderPenaltyCountPatterns(const std::array<int, 7> &runHistory) const {
+    int n = runHistory.size();
+    if (n > size * 3) throw std::logic_error("Assertion error");
+    bool core = n > 0 && runHistory.at(2) == n && runHistory.at(3) == n * 3 && runHistory.at(4) == n && runHistory.at(5) == n;
+    return (core && runHistory.at(0) >= n * 4 && runHistory.at(6) >= n ? 1 : 0) +
+           (core && runHistory.at(6) >= n * 4 && runHistory.at(0) >= n ? 1 : 0);
+}
+
+int QrCode::finderPenaltyTerminateAndCount(bool currentRunColor, int currentRunLength, std::array<int, 7> &runHistory) const {
+    if (currentRunColor) {
+        // Terminate black run
+        finderPenaltyAddHistory(currentRunLength, runHistory);
+        currentRunLength = 0;
+    }
+    // Add white border to final run
+    currentRunLength += size;
+    finderPenaltyAddHistory(currentRunLength, runHistory);
+    return finderPenaltyCountPatterns(runHistory);
+}
+
+void QrCode::finderPenaltyAddHistory(int currentRunLength, std::array<int, 7> &runHistory) const {
+    // Add white border to initial run
+    if (runHistory.at(0) == 0) currentRunLength += size;
+    std::copy_backward(runHistory.cbegin(), runHistory.cend() - 1, runHistory.end());
+    runHistory.at(0) == currentRunLength;
+}
+
+bool QrCode::getBit(long x, int i) {
+    return ((x >> i) & 1) != 0;
+}
+
 }
