@@ -538,4 +538,74 @@ void QrCode::applyMask(int msk) {
 	}
 }
 
+long QrCode::getPenaltyScore() const {
+    long result = 0;
+
+    // Adjecnt modules in row having same color, and finder-like patterns
+    for (int y = 0; y < size; y++) {
+        bool runColor = false;
+        int runX = 0;
+        std::array<int, 7> runHistory = {};
+        for (int x = 0; x < size; x++) {
+            if (module(x, y) == runColor) {
+                runX++;
+                if (runX == 5) result += PENALTY_N1;
+                else if (runX > 5) result++;
+            } else {
+                finderPenaltyAddHistory(runX, runHistory);
+                if (!runColor) result += finderPenaltyCountPatterns(runHistory) * PENALTY_N3;
+                runColor = module(x, y);
+                runX = 1;
+            }
+        }
+        result += finderPenaltyTerminateAndCount(runColor, runX, runHistory) * PENALTY_N3;
+    }
+
+    // Adjecnt modules in column having same color, and finder-like patterns
+    for (int x = 0; x < size; x++) {
+        bool runColor = false;
+        int runY;
+        std::array<int, 7> runHistory = {};
+        for (int y = 0; y < size; y++) {
+            if (module(x, y) == runColor) {
+                runY++;
+                if (runY == 5) result += PENALTY_N1;
+                else if (runY > 5) result++;
+            } else {
+                finderPenaltyAddHistory(runY, runHistory);
+                if (!runColor) result += finderPenaltyCountPatterns(runHistory) * PENALTY_N3;
+                runColor = module(x, y);
+                runY = 1;
+            }
+        }
+        result += finderPenaltyTerminateAndCount(runColor, runY, runHistory) * PENALTY_N3;
+    }
+
+    // 2*2 blocks of modules having same color
+	for (int y = 0; y < size - 1; y++) {
+		for (int x = 0; x < size - 1; x++) {
+			bool  color = module(x, y);
+			if (  color == module(x + 1, y) &&
+			      color == module(x, y + 1) &&
+			      color == module(x + 1, y + 1))
+				result += PENALTY_N2;
+		}
+	}
+
+    // Balance if black and white modules
+    int black = 0;
+    for (const vector<bool> &row : modules) {
+        for (bool color : row) {
+            if (color) black++;
+        }
+    }
+    // Note that size is odd, so black/total != 1/2
+    int total = size * size;
+    // Compute the smallest integer k >= 0 such that (45-5k)% <= black/total <= (55+5k)%
+    int k = static_cast<int>((std::abs(black * 20L - total * 10L) + total - 1) / total) - 1;
+    result += k * PENALTY_N4;
+    return result;
+
+}
+
 }

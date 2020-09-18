@@ -470,7 +470,7 @@ class QrCode final {
      * bits, so it might not be a multiple of 8. The result is in the range [208, 29648].
      * This could be implement as a 40-entry lookup table.
     */
-    private: static int getNumRawDataModule(int ver);
+    private: static int getNumRawDataModules(int ver);
     
     /*
      * Returns the number of 8-bit data (i.e. not error correction) codewords contained
