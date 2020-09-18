@@ -516,4 +516,26 @@ void QrCode::drawCodewords(const vector<uint8_t> &data) {
     if (i != data.size() * 8) throw std::logic_error("Assertion error");
 }
 
+void QrCode::applyMask(int msk) {
+    if (msk < 0 || msk > 7) throw std::domain_error("Mask value out of range");
+    size_t sz = static_cast<size_t>(size);
+	for (size_t y = 0; y < sz; y++) {
+		for (size_t x = 0; x < sz; x++) {
+			bool invert;
+			switch (msk) {
+				case 0:  invert = (x + y) % 2 == 0;                    break;
+				case 1:  invert = y % 2 == 0;                          break;
+				case 2:  invert = x % 3 == 0;                          break;
+				case 3:  invert = (x + y) % 3 == 0;                    break;
+				case 4:  invert = (x / 3 + y / 2) % 2 == 0;            break;
+				case 5:  invert = x * y % 2 + x * y % 3 == 0;          break;
+				case 6:  invert = (x * y % 2 + x * y % 3) % 2 == 0;    break;
+				case 7:  invert = ((x + y) % 2 + x * y % 3) % 2 == 0;  break;
+				default:  throw std::logic_error("Assertion error");
+			}
+			modules.at(y).at(x) = modules.at(y).at(x) ^ (invert & !isFunction.at(y).at(x));
+		}
+	}
+}
+
 }
