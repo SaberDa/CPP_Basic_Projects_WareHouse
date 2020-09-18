@@ -45,6 +45,29 @@ QrSegment QrSegment::makeBytes(const vector<uint8_t> &data) {
     return QrSegment(Mode::BYTE, static_cast<int>(data.size()), std::move(bb));
 }
 
+QrSegment QrSegment::makeNumeric(const char *digits) {
+    BitBuffer bb;
+    int accumData = 0;
+    int accumCount = 0;
+    int charCount = 0;
+    for (; *digits != '\0'; digits++, charCount++) {
+        char c = *digits;
+        if (c < '0' || c > '9') throw std::domain_error("String contains non-numeric characters");
+        accumData = accumData * 10 + (c - '0');
+        accumCount++;
+        if (accumCount == 3) {
+            bb.appendBits(static_cast<uint32_t>(accumData), 10);
+            accumData = 0;
+            accumCount = 0;
+        }
+    }
+    if (accumCount > 0) {
+        // 1 or 2 digits remaining
+        bb.appendBits(static_cast<uint32_t>(accumData), accumCount * 3 + 1);
+    }
+    return QrSegment(Mode::NUMERIC, charCount, std::move(bb));
+}
+
 QrSegment QrSegment::makeAlphanumeric(const char* text) {
     BitBuffer bb;
     int accumData = 0;
