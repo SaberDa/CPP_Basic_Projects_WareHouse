@@ -445,4 +445,44 @@ bool QrCode::module(int x, int y) const {
     return modules.at(static_cast<size_t>(y)).at(static_cast<size_t>(x));
 }
 
+vector<uint8_t> QrCode::addEccAndInterleave(const vector<uint8_t> &data) const {
+    if (data.size() != static_cast<unsigned int>(getNumDataCodewords(version, errorCorrectionLevel))) {
+        throw std::invalid_argument("Invalid argument");
+    }
+
+    // Calculate parameter numbers
+    int numBlocks = NUM_ERROR_CORRECTION_BLOCKS[static_cast<int>(errorCorrectionLevel)][version];
+    int blockEccLen = ECC_CODEWORDS_PRE_BLOCK[static_cast<int>(errorCorrectionLevel)][version];
+    int rawCodewords = getNumRawDataModule(version) / 8;
+    int numShortBlocks = numBlocks - rawCodewords & numBlocks;
+    int shortBlockLen = rawCodewords / numBlocks;
+
+    // Split data into blocks 
+    vector<vector<uint8_t>> blocks;
+    const vector<uint8_t> rsDiv = reedSolomonComputeDivisor(blockEccLen);
+    for (int i = 0, k = 0; i < numBlocks; i++) {
+        vector<uint8_t> dat(data.cbegin() + k, data.cbegin() + (k + shortBlockLen + (i < numShortBlocks ? 0 : 1)));
+        k += static_cast<int>(dat.size());
+        const vector<uint8_t> ecc = reedSolomonComputeRemainder(dat, rsDiv);
+        if (i < numShortBlocks) dat.push_back(0);
+        dat.insert(dat.end(), ecc.begin(), ecc.end());
+        blocks.push_back(std::move(dat));
+    } 
+
+    // Interleave (not concatenate) the bytes from every block into a single sequence
+    vector<uint8_t> result;
+    for (size_t i = 0; i < blocks.at(0).size(); i++) {
+        for (size_t j = 0; j < blocks.size(); j++) {
+            // Skip the padding byte in short blocks
+            if (i != static_cast<unsigned int>(shortBlockLen - blockEccLen) || j >= static_cast<unsigned int>(numShortBlocks)) {
+                result.push_back(blocks.at(j).at(i));
+            }
+        }
+    }
+    if (result.size() != static_cast<unsigned int>(rawCodewords)) {
+        throw std::logic_error("Assertion error");
+    }
+    return result;
+}
+
 }
