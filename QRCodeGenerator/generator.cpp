@@ -661,4 +661,18 @@ vector<uint8_t> QrCode::reedSolomonComputeDivisor(int degree) {
     return result;
 }
 
+vector<uint8_t> QrCode::reedSolomonComputeRemainder(const vector<uint8_t> &data, const vector<uint8_t> &divisor) {
+    vector<uint8_t> result(divisor.size());
+    for (uint8_t b : data) {
+        // Polynomial division
+        uint8_t factor = b ^ result.at(0);
+        result.erase(result.begin());
+        result.push_back(0);
+        for (size_t i = 0; i < result.size(); i++) {
+            result.at(i) ^= reedSolomonMultiply(divisor.at(i), factor);
+        }
+    }
+    return result;
+}
+
 }
