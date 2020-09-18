@@ -48,3 +48,9 @@ In the QRCodeGenerator dir:
 g++ main.cpp generator.cpp
 ./a.out
 ```
+
+---
+
+## Screenshot
+
+![](https://raw.githubusercontent.com/SaberDa/CPP_Basic_Projects_WareHouse/master/QRCodeGenerator/screenshot.png)
