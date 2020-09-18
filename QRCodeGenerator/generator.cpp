@@ -434,4 +434,15 @@ void QrCode::drawAlignmentPattern(int x, int y) {
     }
 }
 
+void QrCode::setFunctionModule(int x, int y, bool isBlack) {
+    size_t ux = static_cast<size_t>(x);
+    size_t uy = static_cast<size_t>(y);
+    modules.at(uy).at(ux) = isBlack;
+    isFunction.at(uy).at(ux) = true;
+}
+
+bool QrCode::module(int x, int y) const {
+    return modules.at(static_cast<size_t>(y)).at(static_cast<size_t>(x));
+}
+
 }
