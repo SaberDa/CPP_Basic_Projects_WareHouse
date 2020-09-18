@@ -14,6 +14,10 @@ A repo for training my C++ skills.
 
 ---
 
+## [QrCode Generator](https://github.com/SaberDa/CPP_Basic_Projects_WareHouse/tree/master/QRCodeGenerator)
+
+---
+
 ## [Memory Leaking Detector](https://github.com/SaberDa/CPP_Basic_Projects_WareHouse/tree/master/MemoryLeakingChecker)
 
 ```
