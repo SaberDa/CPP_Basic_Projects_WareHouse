@@ -426,4 +426,12 @@ void QrCode::drawFinderPattern(int x, int y) {
     }
 }
 
+void QrCode::drawAlignmentPattern(int x, int y) {
+    for (int dy = -2; dy <= 2; dy++) {
+        for (int dx = -2; dx <= 2; dx++) {
+            setFunctionModule(x + dx, y + dy, std::max(std::abs(dx), std::abs(dy)) != 1);
+        }
+    }
+}
+
 }
