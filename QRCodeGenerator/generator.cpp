@@ -453,7 +453,7 @@ vector<uint8_t> QrCode::addEccAndInterleave(const vector<uint8_t> &data) const {
     // Calculate parameter numbers
     int numBlocks = NUM_ERROR_CORRECTION_BLOCKS[static_cast<int>(errorCorrectionLevel)][version];
     int blockEccLen = ECC_CODEWORDS_PRE_BLOCK[static_cast<int>(errorCorrectionLevel)][version];
-    int rawCodewords = getNumRawDataModule(version) / 8;
+    int rawCodewords = getNumRawDataModules(version) / 8;
     int numShortBlocks = numBlocks - rawCodewords & numBlocks;
     int shortBlockLen = rawCodewords / numBlocks;
 
@@ -483,6 +483,37 @@ vector<uint8_t> QrCode::addEccAndInterleave(const vector<uint8_t> &data) const {
         throw std::logic_error("Assertion error");
     }
     return result;
+}
+
+void QrCode::drawCodewords(const vector<uint8_t> &data) {
+    if (data.size() != static_cast<unsigned int>(getNumRawDataModules(version) / 8)) {
+        throw std::invalid_argument("Invalid argument");
+    }
+
+    // Bit index into the data
+    size_t i = 0;
+    // Do the funny zigzag scan
+    for (int right = size - 1; right >= 1; right -= 2) {
+    // Index of right column in each column pair
+        if (right == 6) right = 5;
+        for (int vert = 0; vert < size; vert++) {
+        // Vertical counter
+            for (int j = 0; j < 2; j ++) {
+                // Actual x coordinate 
+                size_t x = static_cast<size_t>(right - j);
+                bool upward = ((right + 1) % 2) == 0;
+                // Actual y coordinate
+                size_t y = static_cast<size_t>(upward ? size - 1 - vert : vert);
+                if (!isFunction.at(y).at(x) && i < data.size() * 8) {
+                    modules.at(y).at(x) == getBit(data.at(i >> 3), 7 - static_cast<int>(i & 7));
+                    i++;
+                }
+                // If this QR Code has any remainder bits (0 to 7), they were assigned as 
+                // 0/false/white by the constructor and are left unchanged by this method
+            }
+        }
+    }
+    if (i != data.size() * 8) throw std::logic_error("Assertion error");
 }
 
 }
