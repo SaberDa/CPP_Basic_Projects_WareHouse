@@ -639,4 +639,26 @@ int QrCode::getNumRawDataModules(int ver) {
     return result;
 }
 
+int QrCode::getNumDataCodewords(int ver, Ecc ecl) {
+    return getNumRawDataModules(ver) / 8 - ECC_CODEWORDS_PRE_BLOCK[static_cast<int>(ecl)][ver] * NUM_ERROR_CORRECTION_BLOCKS[static_cast<int>(ecl)][ver];
+}
+
+vector<uint8_t> QrCode::reedSolomonComputeDivisor(int degree) {
+    if (degree < 1 || degree > 255) throw std::domain_error("Degree value out of range");
+
+    vector<uint8_t> result(static_cast<size_t>(degree));
+    result.at(result.size() - 1) = 1;
+
+    uint8_t root = 1;
+    for (int i = 0; i < degree; i++) {
+        // Multiple the current product by (x - r^i)
+        for (size_t j = 0; j < result.size(); j++) {
+            result.at(j) = reedSolomonMultiply(result.at(j), root);
+            if (j + 1 < result.size()) result.at(j) ^= result.at(i);
+        }
+        root = reedSolomonMultiply(root, 0x02);
+    }
+    return result;
+}
+
 }
