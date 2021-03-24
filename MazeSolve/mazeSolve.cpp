@@ -212,5 +212,26 @@ public:
 		}
 	}
 
+	char getch() {
+		char ch;
+		// Store origin terminal and new terminal
+		static struct termios oldt, newt;
+
+		// Get the origin terminal struct 
+		tcgetattr(STDIN_FILENO, &oldt);
+
+		// Set the new terminal
+		newt = oldt;
+		newt.c_lflag &= ~(ICANON);
+		tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+		system("stty -echo");
+		ch = getchar();
+		system("stty echo");
+
+		tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+		return ch;
+	}
+
 };
 
