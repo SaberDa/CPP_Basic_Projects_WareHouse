@@ -137,7 +137,29 @@ namespace io {
             ~NonOwningIStreamByteSource() {}
         private:
             std::istream &in;
-        };
+        }; // class NonOwningIStreamByteSource
+
+        class NonOwningStringByteSource : public ByteSourceBase {
+        public:
+            NonOwningStringByteSource(const char* str, long long size) : str(str), remaining_byte_count(size) {}
+
+            int read(char *buffer, int desired_byte_count) {
+                int to_copy_byte_count = desired_byte_count;
+                if (remaining_byte_count < to_copy_byte_count) {
+                    to_copy_byte_count = remaining_byte_count;
+                }
+                std::memcpy(buffer, str, to_copy_byte_count);
+                remaining_byte_count -= to_copy_byte_count;
+                str += to_copy_byte_count;
+                return to_copy_byte_count;
+            }
+
+            ~NonOwningStringByteSource() {}
+
+        private:
+            const char *str;
+            long long remaining_byte_count;
+        }; // class NonOwningStringByteSource
 
     } // namespace detail
 
