@@ -123,6 +123,20 @@ namespace io {
             }
         private:
             FILE* file;
+        }; // class OwningStdIOByteSourceBase
+
+        class NonOwningIStreamByteSource: public ByteSourceBase {
+        public:
+            explicit NonOwningIStreamByteSource(std::istream &in): in(in) {}
+
+            int read(char *buffer, int size) {
+                in.read(buffer, size);
+                return in.gcount();
+            }
+
+            ~NonOwningIStreamByteSource() {}
+        private:
+            std::istream &in;
         };
 
     } // namespace detail
